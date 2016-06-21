@@ -185,11 +185,11 @@ from_nvm_scene(std::string const & nvm_file, std::vector<TextureView> * texture_
         int const maxdim = std::max(image->width(), image->height());
         mve_cam.flen = mve_cam.flen / static_cast<float>(maxdim);
 
-        image = mve::image::image_undistort_vsfm<uint8_t>
+        image = mve::image::image_undistort_vsfm<uint8_t> 
             (image, mve_cam.flen, nvm_cam.radial_distortion);
 
         std::string image_file = std::string("/tmp/") + util::fs::basename(nvm_cam.filename);
-        mve::image::save_png_file(image, image_file);
+        //mve::image::save_mvei_file(image, image_file);
 
         texture_views->push_back(TextureView(i, mve_cam, image_file));
         view_counter.inc();
@@ -216,8 +216,11 @@ generate_texture_views(std::string const & in_scene, std::vector<TextureView> * 
     }
 
     /* MVE_SCENE::EMBEDDING */
-    if (tok.size() == 3 && tok[1].empty()) {
-        from_mve_scene(tok[0], tok[2], texture_views);
+    size_t pos = in_scene.rfind("::");
+    if (pos != std::string::npos) {
+        std::string scene_dir = in_scene.substr(0, pos);
+        std::string image_name = in_scene.substr(pos + 2, in_scene.size());
+        from_mve_scene(scene_dir, image_name, texture_views);
     }
 
     std::size_t num_views = texture_views->size();

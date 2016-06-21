@@ -180,6 +180,8 @@ from_nvm_scene(std::string const & nvm_file, std::vector<TextureView> * texture_
         mve::CameraInfo& mve_cam = cameras[i];
         mve::NVMCameraInfo const& nvm_cam = nvm_cams[i];
 
+std::cout << nvm_cam.filename << std::endl;
+
         mve::ByteImage::Ptr image = mve::image::load_file(nvm_cam.filename);
 
         int const maxdim = std::max(image->width(), image->height());
@@ -188,11 +190,16 @@ from_nvm_scene(std::string const & nvm_file, std::vector<TextureView> * texture_
         image = mve::image::image_undistort_vsfm<uint8_t> 
             (image, mve_cam.flen, nvm_cam.radial_distortion);
 
-        std::string image_file = std::string("/tmp/") + util::fs::basename(nvm_cam.filename);
-        //mve::image::save_mvei_file(image, image_file);
+        std::string image_file = std::string("/home/xl/mvs-texturing/build/apps/texrecon/tmp/") + util::fs::basename(nvm_cam.filename);
+
+		std::cout << image_file << std::endl;
+
+        mve::image::save_mvei_file(image, image_file);
 
         texture_views->push_back(TextureView(i, mve_cam, image_file));
         view_counter.inc();
+//exit(0);
+
     }
 }
 

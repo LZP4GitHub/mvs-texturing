@@ -151,7 +151,7 @@ TextureAtlas::apply_edge_padding(void) {
 
             bool now_valid = false;
             /* Calculate new pixel value. */
-            for (int c = 0; c < 5; ++c) {
+            for (int c = 0; c < image->channels(); ++c) {
                 float norm = 0.0f;
                 float value = 0.0f;
                 for (int j = -1; j <= 1; ++j) {
